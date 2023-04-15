@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<contentpackage name="Death Skills Keeper" steamworkshopid="2729718336" corepackage="false" modversion="1.0.3" gameversion="0.20.16.1" installtime="1675022555" altnames="Death Skills Keeper">
+<contentpackage name="Death Skills Keeper" modversion="1.1.0" corepackage="False" steamworkshopid="2729718336" gameversion="1.0.9.0" altnames="DeathSkillsKeeper">
   <Other file="%ModDir%/Lua/config.lua" />
   <Other file="%ModDir%/Lua/Autorun/init.lua" />
   <Other file="%ModDir%/Lua/main.lua" />

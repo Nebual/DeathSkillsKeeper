@@ -29,18 +29,26 @@ function getSkillMinimum(skillPrefab)
 end
 
 function reduceSkills(characterInfo)
-	if config.skillToLoseOnDeathFixed > 0 then
-		if characterInfo and characterInfo.Job then
-			print("Reducing skills for character: ", characterInfo.Name)
-			for skill in characterInfo.Job.GetSkills() do
-				local skillPrefab = getSkillPrefabByIdentifier(characterInfo, skill.Identifier)
-				local minimum = getSkillMinimum(skillPrefab)
-				if skill.Level > minimum then
-					local oldLevel = skill.Level
-					skill.Level = math.max(1, skill.Level - config.skillToLoseOnDeathFixed, minimum)
-					print("  lowering skill ", skill.Identifier, " from ", oldLevel, " to ", skill.Level)
-				end
+	if config.skillToLoseOnDeathFixed == 0 and config.skillToLoseOnDeathPercent == 0 then
+		return
+	end
+	if characterInfo == nil or characterInfo.Job == nil then
+		return
+	end
+
+	print("Reducing skills for character: ", characterInfo.Name)
+	for skill in characterInfo.Job.GetSkills() do
+		local skillPrefab = getSkillPrefabByIdentifier(characterInfo, skill.Identifier)
+		local minimum = getSkillMinimum(skillPrefab)
+		if skill.Level > minimum then
+			local oldLevel = skill.Level
+			local skillLoss = config.skillToLoseOnDeathFixed
+			if config.skillToLoseOnDeathPercent > 0 then
+				local percentBasedSkillLoss = (skill.Level - minimum) * config.skillToLoseOnDeathPercent
+				skillLoss = math.min(percentBasedSkillLoss, skillLoss > 0 and skillLoss or 100)
 			end
+			skill.Level = math.max(1, skill.Level - skillLoss, minimum)
+			print("  lowering skill ", skill.Identifier, " from ", oldLevel, " to ", skill.Level)
 		end
 	end
 end
@@ -55,5 +63,4 @@ Hook.Patch("Barotrauma.Networking.RespawnManager", "ReduceCharacterSkills", func
 	return nil
 end, Hook.HookMethodType.Before)
 
---]]
 print("DeathSkillsKeeper finished hooking")
