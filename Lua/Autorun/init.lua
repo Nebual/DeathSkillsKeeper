@@ -1,3 +1,7 @@
+DeathSkillsKeeper = {
+    Path = ...
+}
+
 if SERVER then
-    dofile("Mods/DeathSkillsKeeper/Lua/main.lua")
+    dofile(DeathSkillsKeeper.Path .. "/Lua/main.lua")
 end
